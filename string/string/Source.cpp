@@ -9,55 +9,53 @@ and demonstrate the increased ease of use that is not offered in C.
 
 class String 
 {
-
-private:
-	char *p;
-	int len;
+    char *p;
+    int len;
 
 public:
-	String() {
-		len = 0;
-		p = '\0';
-	};
+    String() {
+        len = 0;
+        p = '\0';
+    };
 
-	~String() {
-		delete p;
-	};
+    ~String() {
+        delete p;
+    };
 
-	String(const char * s);
-	String(const String & s);
-	friend String operator+(const String& a, const String &);
-	friend std::ostream& operator<<(std::ostream& os, String const& m);
+    String(const char * s);
+    String(const String & s);
+    friend String operator+(const String& a, const String &);
+    friend std::ostream& operator<<(std::ostream& os, String const& m);
 
 };
 
 String::String(const char * s) 
 {
-	len = strlen(s);
-	p = new char[len + 1];
-	strcpy_s(p, len + 1,  s);
+    len = strlen(s);
+    p = new char[len + 1];
+    strcpy_s(p, len + 1,  s);
 
-	/*
-	strcpy is a unsafe funtion. When you try to copy a String using strcpy(), to a buffer which is not large enough to contain it, it will cause a buffer overflow.
+    /*
+    strcpy is a unsafe funtion. When you try to copy a String using strcpy(), to a buffer which is not large enough to contain it, it will cause a buffer overflow.
 
-	char tuna[5];  // a buffer which holds 5 chars incluing the null character.
-	char salmon[] = "A String which is longer than 5 chars";
+    char tuna[5];  // a buffer which holds 5 chars incluing the null character.
+    char salmon[] = "A String which is longer than 5 chars";
 
-	strcpy( tuna, salmon ); // This will corrupt your memory because of the buffer overflow.
+    strcpy( tuna, salmon ); // This will corrupt your memory because of the buffer overflow.
 
-	strcpy_s( tuna, 5, salmon ); // strcpy_s will not write more than 5 chars.
+    strcpy_s( tuna, 5, salmon ); // strcpy_s will not write more than 5 chars.
 
-	strcpy_s() is a security enhanced version of strcpy(). With strcpy_s you can specify the size of the destination buffer to avoid buffer overflows during copies.
-	*/
+    strcpy_s() is a security enhanced version of strcpy(). With strcpy_s you can specify the size of the destination buffer to avoid buffer overflows during copies.
+    */
 }
 
 String::String(const String & s)
 {
-	len = s.len; // Define len on object, equivalent to "self.len = s.len" in Python
-	int buffer_size = s.len + 1;
+    len = s.len; // Define len on object, equivalent to "self.len = s.len" in Python
+    int buffer_size = s.len + 1;
 
-	p = new char[buffer_size];
-	strcpy_s(p, buffer_size, s.p);
+    p = new char[buffer_size];
+    strcpy_s(p, buffer_size, s.p);
 }
 
 /*
@@ -69,21 +67,21 @@ on and left and a 'String' type on the right, call this function".
 */
 String operator+(const String & l, const String & r) {
 
-	String temp;
-	temp.len = l.len + r.len;
-	int temp_buffer_size = temp.len + 1;
+    String temp;
+    temp.len = l.len + r.len;
+    int temp_buffer_size = temp.len + 1;
 
-	temp.p = new char[temp_buffer_size];
+    temp.p = new char[temp_buffer_size];
 
-	strcpy_s(temp.p, temp_buffer_size, l.p); // argument 2 in strcpy_s() is the size of the destination buffer not the size of the source.
-	strcat_s(temp.p, temp_buffer_size, r.p);
-	/*
-	strcat will look for the null-terminator, interpret that as the end of the string, 
+    strcpy_s(temp.p, temp_buffer_size, l.p); // argument 2 in strcpy_s() is the size of the destination buffer not the size of the source.
+    strcat_s(temp.p, temp_buffer_size, r.p);
+    /*
+    strcat will look for the null-terminator, interpret that as the end of the string, 
     and append the new text there, overwriting the null-terminator in the process,
     and writing a new null-terminator at the end of the concatenation. Therefore requires
     strcpy to be used first in order to have a '\0' (It could be NULL and not work!).
-	*/
-	return temp;
+    */
+    return temp;
 }
 
 /*                                                                      v---------
@@ -95,15 +93,15 @@ insertion operator to recognize an ostream object on the left and a Date on the 
                                 v---- left = cout, right = String. This is called from "cout << String(...);"
 */
 std::ostream & operator<<(std::ostream & os, String const & m) {
-	return os << m.p;
+    return os << m.p;
 }
 
 int main() {
-	String left("left "); // Equivalent to, "String left = String("left ")" or "String left = "left"";
-	String right("right");
-	
-	String out = "left " + right + " ";
-	std::cout << out << 5;
+    String left("left "); // Equivalent to, "String left = String("left ")" or "String left = "left"";
+    String right("right");
+    
+    String out = "left " + right + " ";
+    std::cout << out;
 
-	return 0;
+    return 0;
 }

@@ -88,7 +88,7 @@ String operator+(const String & l, const String & r) {
 cout definition is "__PURE_APPDOMAIN_GLOBAL extern _CRTDATA2_IMPORT ostream cout;"
 
 To get cout to accept a String object after the insertion operator, overload the
-insertion operator to recognize an ostream object on the left and a Date on the right.
+insertion operator to recognize an ostream object on the left and a String on the right.
  
                                 v---- left = cout, right = String. This is called from "cout << String(...);"
 */
